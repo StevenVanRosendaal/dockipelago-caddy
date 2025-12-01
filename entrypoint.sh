@@ -24,22 +24,6 @@ if [ ! -f "/app/data/options.yaml" ]; then
     touch /app/data/options.yaml
 fi
 
-# Ensure the config directory exists
-mkdir -p /root/.local/state/Archipelago
-
-# Create host.yaml with proper YAML formatting (spaces, not tabs)
-cat > /root/.local/state/Archipelago/host.yaml << 'EOF'
-lttp_options:
-  rom_file: null
-server_options:
-  port: 38281
-  server_password: null
-general_options:
-  generate_yaml: true
-EOF
-
-echo "Created host.yaml with port 38281"
-
 # Copy custom worlds from mounted volume to worlds directory
 if [ -d "/app/custom_worlds" ] && [ "$(ls -A /app/custom_worlds 2>/dev/null)" ]; then
     echo "Installing custom APWorld files..."
@@ -57,7 +41,6 @@ fi
 # Start the Archipelago WebHost
 echo "=========================================="
 echo "Starting Archipelago WebHost"
-echo "Web Interface: http://${PUBLIC_HOST}"
 echo "Custom worlds directory: /app/custom_worlds"
 echo "=========================================="
 

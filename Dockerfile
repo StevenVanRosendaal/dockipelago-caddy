@@ -3,10 +3,6 @@ FROM python:3.11-slim
 
 # Set environment variables
 ENV ARCHIPELAGO_HOME=/app
-ENV PUBLIC_HOST=archipelago.steros.nl
-ENV BASE_PORT=38281
-ENV PORT_RANGE_START=38281
-ENV PORT_RANGE_END=38281
 
 # Install dependencies
 RUN apt-get update && \
@@ -15,12 +11,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Copy / clone Archipelago code
+# Clone Archipelago code
 WORKDIR $ARCHIPELAGO_HOME
-RUN git clone https://github.com/ArchipelagoMW/Archipelago.git . && \
-    ls -la /app/ && \
-    echo "Verifying MultiServer.py exists..." && \
-    test -f /app/MultiServer.py || (echo "ERROR: MultiServer.py not found!" && find /app -name "*.py" | head -10 && exit 1)
+RUN git clone https://github.com/ArchipelagoMW/Archipelago.git .
 
 # Install Python requirements
 # Archipelago uses ModuleUpdate.py to install dependencies
@@ -41,20 +34,12 @@ RUN mkdir -p /app/custom_worlds /app/data /app/config
 RUN mkdir -p /app/WebHostLib/static/generated && \
     touch /app/data/options.yaml
 
-# Create host.yaml configuration file with single port enforcement
-RUN echo "host_config:" > /app/config/host.yaml && \
-    echo "  host: 0.0.0.0" >> /app/config/host.yaml && \
-    echo "  port: 38281" >> /app/config/host.yaml && \
-    echo "  server_password: null" >> /app/config/host.yaml && \
-    echo "  multiworld_port_range_start: 38281" >> /app/config/host.yaml && \
-    echo "  multiworld_port_range_end: 38281" >> /app/config/host.yaml
-
 # Copy entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Expose ports for WebHost and game servers
-EXPOSE 80 38281
+# Expose port for WebHost web UI
+EXPOSE 80
 
 # Set volumes for persistence and custom content
 VOLUME ["/app/custom_worlds", "/app/data", "/app/config"]

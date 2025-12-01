@@ -4,13 +4,8 @@ services:
     container_name: dockipelago-caddy
     volumes:
       - /home/${USER}/archipelago/custom_worlds:/app/custom_worlds
-      - /home/${USER}/archipelago/data:/app/data
-      - /home/${USER}/archipelago/config:/app/config
-    environment:
-      - PUBLIC_HOST=${PUBLIC_HOST}
-      - BASE_PORT=38281
-      - PORT_RANGE_START=38281
-      - PORT_RANGE_END=38281
+      - dockipelago-data:/app/data
+      - dockipelago-config:/app/config
     restart: unless-stopped
     networks:
       - caddy
@@ -19,3 +14,7 @@ networks:
   caddy:
     external: true
     name: ${CADDY_NETWORK:-caddy}
+
+volumes:
+  dockipelago-data:
+  dockipelago-config:
