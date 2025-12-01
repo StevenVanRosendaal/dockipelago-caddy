@@ -30,7 +30,17 @@ if [ ! -f "/root/.local/state/Archipelago/host.yaml" ]; then
     cat > /root/.local/state/Archipelago/host.yaml << EOF
 lttp_options:
   rom_file: null
+server_options:
+  port: ${BASE_PORT}
+  host: 0.0.0.0
+  server_password: null
+multiworld_options:
+  port_range_start: ${PORT_RANGE_START}
+  port_range_end: ${PORT_RANGE_END}
 EOF
+    echo "Created host.yaml with single port configuration (${BASE_PORT})"
+else
+    echo "Using existing host.yaml"
 fi
 
 # Copy custom worlds from mounted volume to worlds directory

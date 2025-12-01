@@ -56,8 +56,8 @@ Docker container for running Archipelago WebHost with:
 Add this to your Caddyfile:
 
 ```
-archipelago.steros.nl {
-    reverse_proxy archipelago-server:80
+your.domain.com {
+    reverse_proxy dockipelago-caddy:80
 }
 ```
 
@@ -68,7 +68,7 @@ docker exec <caddy-container> caddy reload --config /etc/caddy/Caddyfile
 
 ## Using the WebHost
 
-Once deployed, access the web interface at `https://archipelago.steros.nl` (or your configured domain).
+Once deployed, access the web interface at `https://your.domain.com` (or your configured domain).
 
 You can:
 - Upload YAML configuration files
@@ -83,7 +83,7 @@ You can:
    ```bash
    docker-compose restart
    ```
-   Or via Portainer: **Containers** → `archipelago-server` → **Restart**
+   Or via Portainer: **Containers** → `dockipelago-caddy` → **Restart**
 
 The custom games will be automatically installed and will appear as options in the web UI.
 
@@ -105,7 +105,7 @@ host_config:
 
 **Required:**
 - `USER`: Your server username (files stored at `/home/$USER/archipelago/`)
-- `PUBLIC_HOST`: Your server's public hostname (e.g., `archipelago.steros.nl`)
+- `PUBLIC_HOST`: Your server's public hostname (e.g., `your.domain.com`)
 - `CADDY_NETWORK`: Docker network name used by Caddy (e.g., `caddy`, `caddy_default`, `proxy`)
 
 **Optional (defaults shown):**
@@ -122,13 +122,13 @@ Files are stored in `/home/$USER/archipelago/` on your server:
 ## Building Manually
 
 ```bash
-docker build -t archipelago-server .
+docker build -t dockipelago-caddy .
 docker run -d -p 38281:38281 \
   -v ~/archipelago/custom_worlds:/app/custom_worlds \
   -v ~/archipelago/data:/app/data \
   -v ~/archipelago/config:/app/config \
-  -e PUBLIC_HOST=archipelago.steros.nl \
-  archipelago-server
+  -e PUBLIC_HOST=your.domain.com \
+  dockipelago-caddy
 ```
 
 ## Updating Archipelago
