@@ -18,6 +18,21 @@ echo "Found WebHost at: $WEBHOST_SCRIPT"
 # Skip ModuleUpdate at runtime since dependencies are installed during build
 export SKIP_MODULEUPDATE=1
 
+# Create required data files if they don't exist (volume might be empty)
+if [ ! -f "/app/data/options.yaml" ]; then
+    echo "Creating missing options.yaml..."
+    touch /app/data/options.yaml
+fi
+
+# Create host.yaml if it doesn't exist
+if [ ! -f "/root/.local/state/Archipelago/host.yaml" ]; then
+    mkdir -p /root/.local/state/Archipelago
+    cat > /root/.local/state/Archipelago/host.yaml << EOF
+lttp_options:
+  rom_file: null
+EOF
+fi
+
 # Copy custom worlds from mounted volume to worlds directory
 if [ -d "/app/custom_worlds" ] && [ "$(ls -A /app/custom_worlds 2>/dev/null)" ]; then
     echo "Installing custom APWorld files..."
