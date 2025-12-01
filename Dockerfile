@@ -10,7 +10,7 @@ ENV PORT_RANGE_END=38281
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y git build-essential wget && \
+    apt-get install -y git build-essential wget tk-dev python3-tk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir --upgrade pip setuptools wheel
@@ -36,6 +36,10 @@ RUN python3 /tmp/patch_moduleupdate.py && rm /tmp/patch_moduleupdate.py
 
 # Create directories for custom games and data persistence
 RUN mkdir -p /app/custom_worlds /app/data /app/config
+
+# Create required data files for WebHost
+RUN mkdir -p /app/WebHostLib/static/generated && \
+    touch /app/data/options.yaml
 
 # Create host.yaml configuration file with single port enforcement
 RUN echo "host_config:" > /app/config/host.yaml && \
