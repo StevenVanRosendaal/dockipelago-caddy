@@ -24,24 +24,21 @@ if [ ! -f "/app/data/options.yaml" ]; then
     touch /app/data/options.yaml
 fi
 
-# Create host.yaml if it doesn't exist
-if [ ! -f "/root/.local/state/Archipelago/host.yaml" ]; then
-    mkdir -p /root/.local/state/Archipelago
-    cat > /root/.local/state/Archipelago/host.yaml << EOF
+# Ensure the config directory exists
+mkdir -p /root/.local/state/Archipelago
+
+# Create host.yaml with proper YAML formatting (spaces, not tabs)
+cat > /root/.local/state/Archipelago/host.yaml << 'EOF'
 lttp_options:
   rom_file: null
 server_options:
-  port: ${BASE_PORT}
-  host: 0.0.0.0
+  port: 38281
   server_password: null
-multiworld_options:
-  port_range_start: ${PORT_RANGE_START}
-  port_range_end: ${PORT_RANGE_END}
+general_options:
+  generate_yaml: true
 EOF
-    echo "Created host.yaml with single port configuration (${BASE_PORT})"
-else
-    echo "Using existing host.yaml"
-fi
+
+echo "Created host.yaml with port 38281"
 
 # Copy custom worlds from mounted volume to worlds directory
 if [ -d "/app/custom_worlds" ] && [ "$(ls -A /app/custom_worlds 2>/dev/null)" ]; then
